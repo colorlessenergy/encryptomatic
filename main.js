@@ -54,14 +54,10 @@ function hamsterMe(code, message) {
     }
   });
 
-  var code = [];
+  
+  var sortedLetters = storeLetters(allLetters, storeCode, remainingLetters);
+  console.log(sortedLetters);
 
-  for (var key in storeCode) {
-    code.push(storeCode[key].current)
-  }
-  
-  var sortedLetters = storeLetters(allLetters, storeCode, remainingLetters, "", code);
-  
   return message;
 }
 
@@ -75,48 +71,54 @@ function removeDup(arr) {
   });
 }
 
-function storeLetters(string, storeCode, remain, notfound, code) {
-  var code = code;
+function storeLetters(string, storeCode, remain) {
+  // console.log(string, storeCode, remain, code);
+  var code = [];
+  for (var key in storeCode) {
+    code.push(storeCode[key].current)
+  }
+
   var storeCode = storeCode;
-  var notfound = notfound;
 
   if (remain.length == 0) {
-    console.log(notfound)
-    if (notfound.length > 0) {
-      console.log("these were found: " + notfound)
-    }
-    console.log(storeCode);
+    var found = "";
     var lettersOrganized = {};
 
     for (var key in storeCode) {
+      found = found + storeCode[key].current;
+      found = found + storeCode[key].letters.join("")
       lettersOrganized[key] = {}
+
       if (storeCode[key].letters.length == 0) {
         lettersOrganized[key].letters = [];
         lettersOrganized[key].lead = storeCode[key].current;
       } else {
         lettersOrganized[key].lead = storeCode[key].letters.shift();
-        storeCode[key].letters.push(storeCode[key].current)
+        storeCode[key].letters.push(storeCode[key].current);
         lettersOrganized[key].letters = storeCode[key].letters;
       }
     } 
 
-    console.log(lettersOrganized, notfound);
-    return;
+    var lostLetters = string.split("").filter(function (current) {
+      console.log(found.indexOf(current) == -1, string, current)
+      return found.indexOf(current) == -1;
+    });
+    console.log(lettersOrganized, lostLetters);
+    
+    return '';
   }
 
   code.forEach(function (currentLetter, index) {
-    console.log(string.indexOf(remain[0]), remain[0]);
     if ((string.indexOf(remain[0]) - string.indexOf(currentLetter)) == 1) {
-      console.log(notfound);
-      notfound += remain[0];
       storeCode[index].letters.push(storeCode[index].current);
       storeCode[index].current = remain[0];
       return;
-    }
+    } 
   });
 
   remain = remain.slice(1);
-  storeLetters(string, storeCode, remain, notfound, code);
+
+  storeLetters(string, storeCode, remain);
 }
 
 hamsterMe('hmster', 'hamster')
