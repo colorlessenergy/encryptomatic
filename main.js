@@ -82,12 +82,13 @@ function storeLetters(string, storeCode, remain) {
 
   if (remain.length == 0) {
     var found = "";
+    var lastLetterAlpha = [];
     var lettersOrganized = {};
 
     for (var key in storeCode) {
       found = found + storeCode[key].current;
       found = found + storeCode[key].letters.join("")
-      lettersOrganized[key] = {}
+      lettersOrganized[key] = {};
 
       if (storeCode[key].letters.length == 0) {
         lettersOrganized[key].letters = [];
@@ -97,28 +98,57 @@ function storeLetters(string, storeCode, remain) {
         storeCode[key].letters.push(storeCode[key].current);
         lettersOrganized[key].letters = storeCode[key].letters;
       }
-    } 
+    }
 
+    // finds the last letters in every letter array in the object.
+
+    for (var organizedLetterKey in lettersOrganized) {
+      var lastLetter = lettersOrganized[organizedLetterKey].letters[lettersOrganized[organizedLetterKey].letters.length - 1];
+      if (lastLetter !== undefined) {
+        lastLetterAlpha.push(lettersOrganized[organizedLetterKey].letters[lettersOrganized[organizedLetterKey].letters.length - 1])
+      } else {
+        lastLetterAlpha.push(lettersOrganized[organizedLetterKey].lead);
+      }
+    }
+
+    // moves the last letter to end of the array then get the last letter
+
+    var lastFoundLetter = lastLetterAlpha.sort().join("");
+    lastFoundLetter = lastFoundLetter[lastFoundLetter.length-1];
+
+    console.log(lastFoundLetter);
+    // gets all the letters that weren't used
     var lostLetters = string.split("").filter(function (current) {
-      console.log(found.indexOf(current) == -1, string, current)
       return found.indexOf(current) == -1;
     });
-    console.log(lettersOrganized, lostLetters);
-    
-    return '';
+  
+    console.log(lostLetters, lettersOrganized);
+    // looks in every letters array in the organized object and
+    // finds the last letter
+    for (var olk in lettersOrganized) {
+      if (lettersOrganized[olk].letters.indexOf(lastFoundLetter) !== -1) {
+        lostLetters.forEach(function (letter) {
+          lettersOrganized[olk].letters.push(letter)
+        })
+      }
+    }
+
+    console.log(lettersOrganized);
+
+    return lettersOrganized;
   }
 
+  // stores the letters in the object
   code.forEach(function (currentLetter, index) {
     if ((string.indexOf(remain[0]) - string.indexOf(currentLetter)) == 1) {
       storeCode[index].letters.push(storeCode[index].current);
       storeCode[index].current = remain[0];
-      return;
     } 
   });
 
   remain = remain.slice(1);
 
-  storeLetters(string, storeCode, remain);
+  return storeLetters(string, storeCode, remain);
 }
 
 hamsterMe('hmster', 'hamster')
