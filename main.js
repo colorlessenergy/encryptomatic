@@ -38,6 +38,7 @@ function hamsterMe(code, message) {
   var allLetters = "abcdefghijklmnopqrstuvwxyz";
   var remainingLetters = allLetters.slice(0);
   var nodupCode = removeDup(code);
+  var finalOutput = "";
   nodupCode.forEach(function (current) {
     if (remainingLetters.indexOf(current) > -1) {
       remainingLetters = remainingLetters.replace(current, "");
@@ -58,6 +59,18 @@ function hamsterMe(code, message) {
   var sortedLetters = storeLetters(allLetters, storeCode, remainingLetters);
   console.log(sortedLetters);
 
+   for (var findLetter in sortedLetters) {
+     message.split("").forEach(function (current) {
+       if (sortedLetters[findLetter].lead == current) {
+         finalOutput += current+ "1" 
+       } else if (sortedLetters[findLetter].letters.indexOf(current) !== -1) {
+         console.log(sortedLetters[findLetter].letters.indexOf(current), current)
+         finalOutput += sortedLetters[findLetter].lead + (sortedLetters[findLetter].letters.indexOf(current) + 2);
+       }
+     })
+   }
+
+   console.log(finalOutput)
   return message;
 }
 
@@ -151,4 +164,5 @@ function storeLetters(string, storeCode, remain) {
   return storeLetters(string, storeCode, remain);
 }
 
-hamsterMe('hmster', 'hamster')
+//"h1t8m1s1t1e1r1"
+hamsterMe("hmster", "hamster")
