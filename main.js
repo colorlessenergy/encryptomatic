@@ -45,7 +45,6 @@ function hamsterMe(code, message) {
     }
   });
 
-  console.log(remainingLetters);
   var storeCode = {};
   // moves the current code letter into an object
   nodupCode.forEach(function (current, index) {
@@ -57,21 +56,18 @@ function hamsterMe(code, message) {
 
   
   var sortedLetters = storeLetters(allLetters, storeCode, remainingLetters);
-  console.log(sortedLetters);
-
-   for (var findLetter in sortedLetters) {
-     message.split("").forEach(function (current) {
-       if (sortedLetters[findLetter].lead == current) {
-         finalOutput += current+ "1" 
-       } else if (sortedLetters[findLetter].letters.indexOf(current) !== -1) {
-         console.log(sortedLetters[findLetter].letters.indexOf(current), current)
-         finalOutput += sortedLetters[findLetter].lead + (sortedLetters[findLetter].letters.indexOf(current) + 2);
-       }
-     })
+  for (var i = 0; i < message.length; i++) {
+     for (var findLetter in sortedLetters) {
+        if (sortedLetters[findLetter].lead == message[i]) {
+          finalOutput += sortedLetters[findLetter].lead + "1";
+        } else if (sortedLetters[findLetter].letters.indexOf(message[i]) !== -1) {
+          finalOutput += sortedLetters[findLetter].lead + (sortedLetters[findLetter].letters.indexOf(message[i]) + 2);
+        }
+     }
    }
 
-   console.log(finalOutput)
-  return message;
+  console.log(finalOutput)
+  return finalOutput;
 }
 
 function removeDup(arr) {
@@ -129,24 +125,22 @@ function storeLetters(string, storeCode, remain) {
     var lastFoundLetter = lastLetterAlpha.sort().join("");
     lastFoundLetter = lastFoundLetter[lastFoundLetter.length-1];
 
-    console.log(lastFoundLetter);
     // gets all the letters that weren't used
     var lostLetters = string.split("").filter(function (current) {
       return found.indexOf(current) == -1;
     });
+
   
-    console.log(lostLetters, lettersOrganized);
     // looks in every letters array in the organized object and
     // finds the last letter
     for (var olk in lettersOrganized) {
-      if (lettersOrganized[olk].letters.indexOf(lastFoundLetter) !== -1) {
+      if (lettersOrganized[olk].letters.indexOf(lastFoundLetter) !== -1 || lettersOrganized[olk].lead.indexOf(lastFoundLetter) !== -1) {
         lostLetters.forEach(function (letter) {
           lettersOrganized[olk].letters.push(letter)
         })
       }
     }
 
-    console.log(lettersOrganized);
 
     return lettersOrganized;
   }
@@ -164,5 +158,9 @@ function storeLetters(string, storeCode, remain) {
   return storeLetters(string, storeCode, remain);
 }
 
-//"h1t8m1s1t1e1r1"
-hamsterMe("hmster", "hamster")
+// //"h1t8m1s1t1e1r1"
+// hamsterMe("wgz", "xretdmjcbxubp"); // w2g12z6g14z5g7g4z4z3w2g15z3g10
+// hamsterMe("hamster", "helpme"); // "h1e1h5m4m1e1" works
+// hamsterMe("hhhhammmstteree", "hamster")  // "h1a1m1s1t1e1r1" works
+// hamsterMe("hamster", "abcdefghijklmnopqrstuvwxyz") // "a1a2a3a4e1e2e3h1h2h3h4h5m1m2m3m4m5r1s1t1t2t3t4t5t6t7"); 
+// hamsterMe("f", "abcdefghijklmnopqrstuvwxyz") // "f22f23f24f25f26f1f2f3f4f5f6f7f8f9f10f11f12f13f14f15f16f17f18f19f20f21", "One letter code ?"); works
