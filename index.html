@@ -2,9 +2,36 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>hamster me</title>
+    <title>encryptomatic</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/module.css">
   </head>
   <body>
+
+    <header>
+      <h1>encrypt your message!</h1>
+    </header>
+
+    <section class="about">
+      <h2>All About it</h2>
+      <p>Insert a message and a code to encrypt your message</p>
+    </section>
+    <form class="form">
+      <div class="form__group">
+        <label for="message">message</label>
+        <input class="form__input" type="text" id="message" name="message">
+      </div>
+      <div class="form__group">
+        <label for="code">code</label>
+        <input class="form__input" type="text" id="code" name="code">
+      </div>
+
+      <button class="form__submit" type="submit">submit</button>
+    </form>
+
+    <p class="output">your encrypted message: <span id="output"></span> </p>
+    <script src="encrypt-message.js"></script>
     <script src="main.js"></script>
   </body>
 </html>
